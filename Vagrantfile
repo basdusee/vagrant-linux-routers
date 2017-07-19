@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
     edge1.vm.network "private_network", ip: "192.168.23.5/24", nic_type: "virtio"
     edge1.vm.network "private_network", ip: "172.23.0.250/24", virtualbox__intnet: "internal-affairs", nic_type: "virtio"
     edge1.vm.provider "virtualbox" do |vb|
-        vb.memory = "256"
+        vb.memory = "128"
         vb.name = "edge1"
     end
   end
@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
     edge2.vm.network "private_network", ip: "192.168.23.6/24", nic_type: "virtio"
     edge2.vm.network "private_network", ip: "172.23.0.251/24", virtualbox__intnet: "internal-affairs", nic_type: "virtio"
     edge2.vm.provider "virtualbox" do |vb|
-        vb.memory = "256"
+        vb.memory = "128"
         vb.name = "edge2"
     end
   end
@@ -47,7 +47,7 @@ Vagrant.configure("2") do |config|
     introuter.vm.network "private_network", ip: "192.168.123.254/24", virtualbox__intnet: "deepspace", nic_type: "virtio"
     introuter.vm.network "private_network", ip: "172.23.0.10/24", virtualbox__intnet: "internal-affairs", nic_type: "virtio" 
     introuter.vm.provider "virtualbox" do |vb|
-        vb.memory = "192"
+        vb.memory = "128"
         vb.name = "introuter"
     end
 
@@ -62,7 +62,7 @@ Vagrant.configure("2") do |config|
     darkrouter.vm.network "private_network", ip: "192.168.123.10/24", virtualbox__intnet: "deepspace", nic_type: "virtio"
     darkrouter.vm.network "private_network", ip: "192.168.101.254/24", virtualbox__intnet: "darknet", nic_type: "virtio" 
     darkrouter.vm.provider "virtualbox" do |vb|
-        vb.memory = "192"
+        vb.memory = "128"
         vb.name = "darkrouter"
     end
     darkrouter.vm.provision :shell, :inline => "sudo systemctl disable salt-minion && sudo systemctl stop salt-minion"

@@ -1,0 +1,41 @@
+{%- set mgmt = "enp0s3" -%}
+{%- set intern1 = "enp0s8" %}
+{%- set intern2 = "enp0s9" %}
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+COMMIT
+*filter
+:INPUT DROP [0:0
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:mgmt - [0:0]
+:mgmtTCP - [0:0]
+:mgmtUDP - [0:0]
+:intern - [0:0]
+:internTCP - [0:0]
+:internUDP - [0:0]
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m conntrack --ctstate INVALID -j DROP
+-A INPUT -d 127.0.0.0/8 ! -i lo -j REJECT --reject-with icmp-port-unreachable
+-A INPUT -i {{ mgmt }} -j mgmt
+-A INPUT -i {{ intern1 }} -j intern
+-A INPUT -i {{ intern2 }} -j intern
+-A INPUT -p tcp -j REJECT --reject-with tcp-reset
+-A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable
+-A OUTPUT -o lo -j ACCEPT
+-A intern -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
+-A intern -p ospf -j ACCEPT
+-A intern -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j internTCP
+-A intern -p udp -m conntrack --ctstate NEW -j internUDP
+-A internTCP -p tcp -m tcp --dport 22 -j ACCEPT
+-A internUDP -p udp -m udp --dport 1194 -j ACCEPT
+-A mgmt -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
+-A mgmt -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j mgmtTCP
+-A mgmt -p udp -m conntrack --ctstate NEW -j mgmtUDP
+-A mgmtTCP -p tcp -m tcp --dport 22 -j ACCEPT
+-A mgmtUDP -p udp -m udp --dport 68 -j ACCEPT
+COMMIT
