@@ -1,0 +1,7 @@
+# Empty minion config....
+
+file_client: local
+
+file_roots:
+  base:
+    - /srv/salt

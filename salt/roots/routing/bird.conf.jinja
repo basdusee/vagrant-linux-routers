@@ -1,0 +1,28 @@
+log syslog all;
+ 
+router id {{ grains['ip4_interfaces']['enp0s9'][0] }};
+ 
+protocol direct {
+    import all;
+    interface "*"; # Restrict network interfaces it works with
+}
+ 
+protocol kernel {
+    learn; # Learn all alien routes from the kernel
+    scan time 15; # Scan kernel routing table every 20 seconds
+    export all; # Actually put BIRD routes into the Linux table
+}
+ 
+protocol device {
+    scan time 10; # Scan interfaces every 10 seconds
+}
+ 
+protocol ospf MyOSPF {
+     rfc1583compat yes;
+     tick 2;
+     import all;
+     export all;
+     area 0.0.0.0 {
+       interface "enp0s9";
+    };
+}
