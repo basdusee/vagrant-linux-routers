@@ -2,6 +2,6 @@ base:
   '*':
     - basis
     - routing
-  'router*':
+  'edge*':
     - vpn
     - firewall
