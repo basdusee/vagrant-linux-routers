@@ -18,6 +18,11 @@ routing_pakketten:
       - haproxy
       - hatop
 
+bird6_service:
+  service.dead:
+    - name: bird6
+    - enable: False
+
 bird_service:
   service.running:
     - name: bird

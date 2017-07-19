@@ -4,4 +4,8 @@ base:
     - routing
   'edge*':
     - vpn
-    - firewall
+    - firewall.edge
+  'not edge*':
+    - firewall.intern
+  'darkweb*':
+    - web

@@ -23,6 +23,10 @@ protocol ospf MyOSPF {
      import all;
      export all;
      area 0.0.0.0 {
+{%- if 'edge' in grains['host'] %}
        interface "enp0s9";
+{%- else %}
+       interface "enp0s8", "enp0s9";
+{%- endif %}
     };
 }

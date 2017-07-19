@@ -3,83 +3,95 @@
 
 Vagrant.configure("2") do |config|
 
+  config.vm.box = "bento/debian-9.0"
+
+  config.vm.synced_folder "salt/roots/", "/srv/salt/"
+  config.vm.provision :salt do |salt|
+    salt.masterless = true
+    salt.minion_config = "salt/minion"
+    salt.run_highstate = true
+    salt.colorize = true
+  end
+
+#######################################################################################
+
   config.vm.define "Edge1" do |edge1|
-    edge1.vm.box = "bento/debian-9.0"
     edge1.vm.hostname = "edge1"
 
     edge1.vm.network "private_network", ip: "192.168.23.5/24", nic_type: "virtio"
     edge1.vm.network "private_network", ip: "172.23.0.250/24", virtualbox__intnet: "internal-affairs", nic_type: "virtio"
     edge1.vm.provider "virtualbox" do |vb|
-        vb.memory = "512"
+        vb.memory = "256"
         vb.name = "edge1"
-    end
-
-    edge1.vm.synced_folder "salt/roots/", "/srv/salt/"
-    edge1.vm.provision :salt do |salt|
-      salt.masterless = true
-      salt.minion_config = "salt/minion"
-      salt.run_highstate = true
-      salt.colorize = true
     end
   end
 
+#######################################################################################
+
   config.vm.define "Edge2" do |edge2|
-    edge2.vm.box = "bento/debian-9.0"
     edge2.vm.hostname = "edge2"
 
     edge2.vm.network "private_network", ip: "192.168.23.6/24", nic_type: "virtio"
     edge2.vm.network "private_network", ip: "172.23.0.251/24", virtualbox__intnet: "internal-affairs", nic_type: "virtio"
     edge2.vm.provider "virtualbox" do |vb|
-        vb.memory = "512"
+        vb.memory = "256"
         vb.name = "edge2"
-    end
-
-    edge2.vm.synced_folder "salt/roots/", "/srv/salt/"
-    edge2.vm.provision :salt do |salt|
-      salt.masterless = true
-      salt.minion_config = "salt/minion"
-      salt.run_highstate = true
-      salt.colorize = true
     end
   end
 
+#######################################################################################
+
   config.vm.define "Introuter" do |introuter|
-    introuter.vm.box = "bento/debian-9.0"
     introuter.vm.hostname = "introuter"
 
-    introuter.vm.network "private_network", ip: "192.168.123.254/24", virtualbox__intnet: "darkweb", nic_type: "virtio"
+    introuter.vm.network "private_network", ip: "192.168.123.254/24", virtualbox__intnet: "deepspace", nic_type: "virtio"
     introuter.vm.network "private_network", ip: "172.23.0.10/24", virtualbox__intnet: "internal-affairs", nic_type: "virtio" 
     introuter.vm.provider "virtualbox" do |vb|
-        vb.memory = "382"
+        vb.memory = "192"
         vb.name = "introuter"
     end
 
-    introuter.vm.synced_folder "salt/roots/", "/srv/salt/"
-    introuter.vm.provision :salt do |salt|
-      salt.masterless = true
-      salt.minion_config = "salt/minion"
-      salt.run_highstate = true
-      salt.colorize = true
+    introuter.vm.provision :shell, :inline => "sudo systemctl disable salt-minion && sudo systemctl stop salt-minion"
+  end
+
+#######################################################################################
+
+  config.vm.define "Darkrouter" do |darkrouter|
+    darkrouter.vm.hostname = "darkrouter"
+
+    darkrouter.vm.network "private_network", ip: "192.168.123.10/24", virtualbox__intnet: "deepspace", nic_type: "virtio"
+    darkrouter.vm.network "private_network", ip: "192.168.101.254/24", virtualbox__intnet: "darknet", nic_type: "virtio" 
+    darkrouter.vm.provider "virtualbox" do |vb|
+        vb.memory = "192"
+        vb.name = "darkrouter"
+    end
+    darkrouter.vm.provision :shell, :inline => "sudo systemctl disable salt-minion && sudo systemctl stop salt-minion"
+  end
+
+#######################################################################################
+
+  config.vm.define "Darkweb01" do |darkweb01|
+    darkweb01.vm.hostname = "darkweb01"
+
+    darkweb01.vm.network "private_network", ip: "192.168.101.10/24", virtualbox__intnet: "darknet", nic_type: "virtio" 
+    darkweb01.vm.provider "virtualbox" do |vb|
+        vb.memory = "256"
+        vb.name = "darkweb01"
     end
   end
 
-  config.vm.define "Darkweb" do |darkweb|
-    darkweb.vm.box = "bento/debian-9.0"
-    darkweb.vm.hostname = "darkweb"
+#######################################################################################
 
-    darkweb.vm.network "private_network", ip: "192.168.123.10/24", virtualbox__intnet: "darkweb", nic_type: "virtio"
-    darkweb.vm.network "private_network", ip: "192.168.101.254/24", virtualbox__intnet: "deepspace", nic_type: "virtio" 
-    darkweb.vm.provider "virtualbox" do |vb|
-        vb.memory = "382"
-        vb.name = "darkweb"
-    end
+  config.vm.define "Darkweb02" do |darkweb02|
+    darkweb02.vm.hostname = "darkweb02"
 
-    darkweb.vm.synced_folder "salt/roots/", "/srv/salt/"
-    darkweb.vm.provision :salt do |salt|
-      salt.masterless = true
-      salt.minion_config = "salt/minion"
-      salt.run_highstate = true
-      salt.colorize = true
+    darkweb02.vm.network "private_network", ip: "192.168.101.11/24", virtualbox__intnet: "darknet", nic_type: "virtio" 
+    darkweb02.vm.provider "virtualbox" do |vb|
+        vb.memory = "256"
+        vb.name = "darkweb02"
     end
   end
+  
+#######################################################################################
+ 
 end
