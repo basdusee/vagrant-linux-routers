@@ -1,10 +1,11 @@
 base:
   '*':
     - basis
-    - routing
+    - routing.router
   'edge*':
-    - vpn
     - firewall.edge
+    - vpn
+    - failover
   'not edge*':
     - firewall.intern
   'darkweb*':

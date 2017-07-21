@@ -1,0 +1,28 @@
+{%- set floatip = pillar['keepaliveip']['www'] -%}
+{%- set extint = "enp0s8" -%}
+{%- set intint = "enp0s9" -%}
+
+vrrp_script chk_haproxy {
+    script "killall -0  haproxy"
+    interval 2
+    weight 2
+}
+
+vrrp_instance VI_1 {
+    state MASTER
+    interface {{ extint }}
+    virtual_router_id 51
+    priority {{ 102 - grains['host'][-1:]|int }}
+    virtual_ipaddress {
+      {{ floatip }}/24 dev {{ extint }}
+    }
+    track_script {
+        chk_haproxy
+    }
+
+    authentication {
+        auth_type PASS
+        auth_pass RespectToTheIcecreamVan
+    }
+
+}

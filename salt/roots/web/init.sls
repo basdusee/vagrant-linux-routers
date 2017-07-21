@@ -19,9 +19,9 @@ gunicorn:
     - group: www-data
     - clean: True
 
-webside:
-  service.running:
-    - name: hypnotoad
-    - require:
-      - file: /etc/init/hypnotoad.conf
-      - pip: gunicorn
+#webside:
+#  service.running:
+#    - name: hypnotoad
+#    - require:
+#      - file: /etc/init/hypnotoad.conf
+#      - pip: gunicorn

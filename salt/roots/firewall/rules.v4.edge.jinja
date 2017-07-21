@@ -7,14 +7,12 @@
 :OUTPUT ACCEPT [0:0]
 :POSTROUTING ACCEPT [0:0]
 -A POSTROUTING -o {{ extern }} -j MASQUERADE
+-A POSTROUTING -o {{ mgmt }} -j MASQUERADE
 COMMIT
 *filter
 :INPUT DROP [0:0
 :FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
-:mgmt - [0:0]
-:mgmtTCP - [0:0]
-:mgmtUDP - [0:0]
 :intern - [0:0]
 :internTCPforward - [0:0]
 :internUDPforward - [0:0]
@@ -26,7 +24,7 @@ COMMIT
 -A INPUT -i lo -j ACCEPT
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -d 127.0.0.0/8 ! -i lo -j REJECT --reject-with icmp-port-unreachable
--A INPUT -i {{ mgmt }} -j mgmt
+-A INPUT -i {{ mgmt }} -j ACCEPT
 -A INPUT -i {{ intern }} -j intern
 -A INPUT -i {{ extern }} -j extern
 -A INPUT -p tcp -j REJECT --reject-with tcp-reset
@@ -44,11 +42,6 @@ COMMIT
 -A internTCPforward -p tcp -m tcp --dport 443 -j ACCEPT
 -A internUDPforward -p udp -m udp --dport 53 -j ACCEPT
 -A internTCP -p tcp -m tcp --dport 22 -j ACCEPT
--A mgmt -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
--A mgmt -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j mgmtTCP
--A mgmt -p udp -m conntrack --ctstate NEW -j mgmtUDP
--A mgmtTCP -p tcp -m tcp --dport 22 -j ACCEPT
--A mgmtUDP -p udp -m udp --dport 68 -j ACCEPT
 -A extern -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 -A extern -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j externTCP
 -A extern -p udp -m conntrack --ctstate NEW -j externUDP
