@@ -1,7 +1,6 @@
 base:
   '*':
     - basis
-    - routing.router
   'edge*':
     - firewall.edge
     - vpn
@@ -10,3 +9,6 @@ base:
     - firewall.intern
   'darkweb*':
     - web
+    - routing.host
+  'not darkweb*':
+    - routing.router

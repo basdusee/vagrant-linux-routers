@@ -13,6 +13,8 @@ Wat heb je nodig om los te gaan met deze spullen?
 * Vagrant ssh Edge1 (of Edge2 of Introuter, of Darkrouter, of Darkweb01/02)
 
 ## Design van het Vagrant netwerkje
+Hier een netwerktekening:
+![](documentatie/netwerktekening.svg)
 Edge1 en Edge2 zijn twee redundante Edge routers en hangen aan het Internet (in dit geval is het Internet een Host-Only netwerk met de Virtualbox host). Het idee is dat deze Active/Passive of Active/Active werken en elkaars werk kunnen overnemen.
 
 Daarachter ligt een "intern" subnet (noem het een DMZ oid) waaraan een enkele interne router hangt (Introuter). Deze interne router ontsluit een nog dieper gelegen subnetje wat in eerste instantie niet bekend is bij de beide Edge routers (routing protocol nodig dus..). Op dat diepere netwerkje zitten twee webservers (ik voel een load balancing aankomen...).

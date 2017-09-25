@@ -1,17 +1,62 @@
-firewallpakkettenlijst:
-  pkg.installed:
-    - pkgs:
-      - iptables-persistent
-  service.running:
-    - name: netfilter-persistent
-    - enable: True
-    - watch:
-      - file: /etc/iptables/rules.v4
+#!py
 
-/etc/iptables/rules.v4:
-  file.managed:
-    - source: salt://firewall/rules.v4.intern.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 600
+def run():
+    config = {}
+
+    # Install packages, no magic here
+    config['firewallpakkettenlijst'] = {
+                'pkg.installed': [
+                    {'name': 'iptables-persistent'},
+                ],
+                'service.running': [
+                    {'name': 'netfilter-persistent'},
+                    {'enable': 'True'}
+                ]
+    }
+
+    # get hostname for targeting firewall
+    hostname = __grains__['host']
+    if 'router' in hostname:
+        vuurmuur = __pillar__['router']['firewall']
+    elif 'web' in hostname:
+        vuurmuur = __pillar__['webserver']['firewall']
+    else:
+        vuurmuur = False
+    
+    # get all the interfaces and strip off lo
+    int4 = __grains__['ip4_interfaces']
+    del int4['lo']
+
+    mgmt = ''
+    appserver = False
+    for intname, ip in int4.iteritems():
+        if ip == ['10.0.2.15',]:
+            mgmt = intname
+
+    if mgmt != '':
+        del int4[mgmt]
+
+    if len(int4) == 1:
+        appserver = True
+
+    # This is the rules file
+    config['rulefilev4'] = {
+            'file.managed': [
+                {'name': '/etc/iptables/rules.v4'},
+                {'source': 'salt://firewall/rules.v4.intern.jinja'},
+                {'user': 'root'},
+                {'group': 'root'},
+                {'mode': '600'},
+                {'template': 'jinja'},
+                {'makedirs': 'True'},
+                {'context': {
+                    'mgmt': mgmt,
+                    'intint': int4.keys(),
+                    'appserver': appserver,
+                    'vuurmuur': vuurmuur
+                    }
+                }
+                ]
+    }
+
+    return config

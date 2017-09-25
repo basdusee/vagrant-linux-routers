@@ -17,6 +17,22 @@ Vagrant.configure("2") do |config|
       "keepaliveip" => {
         "www" => "192.168.23.101",
         "firewall" => "192.168.23.10"
+      },
+      "webserver" => {
+          "firewall" => {
+            "tcp" => [22, 80],
+            "udp" => [68]
+          }
+      },
+      "router" => {
+          "firewall" => {
+            "tcp" => [22],
+            "udp" => [68]
+          },
+          "forward" => {
+            "tcp" => [22, 80, 443],
+            "udp" => [68]
+          }
       }
     })
   end

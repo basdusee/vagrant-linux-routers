@@ -1,6 +1,3 @@
-{%- set mgmt = "enp0s3" -%}
-{%- set intern1 = "enp0s8" %}
-{%- set intern2 = "enp0s9" %}
 *nat
 :PREROUTING ACCEPT [0:0]
 :INPUT ACCEPT [0:0]
@@ -22,8 +19,9 @@ COMMIT
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -d 127.0.0.0/8 ! -i lo -j REJECT --reject-with icmp-port-unreachable
 -A INPUT -i {{ mgmt }} -j mgmt
--A INPUT -i {{ intern1 }} -j intern
--A INPUT -i {{ intern2 }} -j intern
+{% for int in intint -%}
+-A INPUT -i {{ int }} -j intern
+{% endfor -%}
 -A INPUT -p tcp -j REJECT --reject-with tcp-reset
 -A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable
 -A OUTPUT -o lo -j ACCEPT
@@ -31,8 +29,12 @@ COMMIT
 -A intern -p ospf -j ACCEPT
 -A intern -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j internTCP
 -A intern -p udp -m conntrack --ctstate NEW -j internUDP
--A internTCP -p tcp -m tcp --dport 22 -j ACCEPT
--A internUDP -p udp -m udp --dport 1194 -j ACCEPT
+{%- for port in vuurmuur['tcp'] %}
+-A internTCP -p tcp -m tcp --dport {{ port }} -j ACCEPT
+{%- endfor -%}
+{%- for port in vuurmuur['udp'] %}
+-A internUDP -p udp -m udp --dport {{ port }} -j ACCEPT
+{% endfor -%}
 -A mgmt -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 -A mgmt -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j mgmtTCP
 -A mgmt -p udp -m conntrack --ctstate NEW -j mgmtUDP
