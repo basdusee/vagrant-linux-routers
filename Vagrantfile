@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "bento/debian-9.0"
+  config.vm.box = "bento/debian-9"
 
   config.vm.synced_folder "salt/roots/", "/srv/salt/"
   config.vm.provision :salt do |salt|
@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
         vb.name = "introuter"
     end
 
-    introuter.vm.provision :shell, :inline => "sudo systemctl disable salt-minion && sudo systemctl stop salt-minion"
+    #introuter.vm.provision :shell, :inline => "sudo systemctl disable salt-minion && sudo systemctl stop salt-minion"
   end
 
 #######################################################################################
@@ -89,7 +89,7 @@ Vagrant.configure("2") do |config|
         vb.memory = "256"
         vb.name = "darkrouter"
     end
-    darkrouter.vm.provision :shell, :inline => "sudo systemctl disable salt-minion && sudo systemctl stop salt-minion"
+    #darkrouter.vm.provision :shell, :inline => "sudo systemctl disable salt-minion && sudo systemctl stop salt-minion"
   end
 
 #######################################################################################

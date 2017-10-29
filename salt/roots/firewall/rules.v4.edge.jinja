@@ -1,6 +1,6 @@
 {%- set mgmt = "enp0s3" -%}
 {%- set intern = "enp0s9" %}
-{%- set extern = "enp0s8" %}
+{%- set extern = "enp0s8" -%}
 *nat
 :PREROUTING ACCEPT [0:0]
 :INPUT ACCEPT [0:0]
@@ -14,37 +14,48 @@ COMMIT
 :FORWARD DROP [0:0]
 :OUTPUT ACCEPT [0:0]
 :intern - [0:0]
-:internTCPforward - [0:0]
-:internUDPforward - [0:0]
 :internTCP - [0:0]
+:internUDP - [0:0]
 :extern - [0:0]
 :externTCP - [0:0]
 :externUDP - [0:0]
+:mgmt - [0:0]
+:mgmtTCP - [0:0]
+:mgmtUDP - [0:0]
+:internforward - [0:0]
+:internTCPforward - [0:0]
+:internUDPforward - [0:0]
 -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i lo -j ACCEPT
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -d 127.0.0.0/8 ! -i lo -j REJECT --reject-with icmp-port-unreachable
--A INPUT -i {{ mgmt }} -j ACCEPT
+-A INPUT -i {{ mgmt }} -j mgmt
 -A INPUT -i {{ intern }} -j intern
 -A INPUT -i {{ extern }} -j extern
 -A INPUT -p tcp -j REJECT --reject-with tcp-reset
 -A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable
 -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
--A FORWARD -i {{ intern }} -o {{ extern }} -j ACCEPT
--A OUTPUT -o lo -j ACCEPT
+-A FORWARD -m conntrack --ctstate INVALID -j DROP
+-A FORWARD -i {{ intern }} -j internforward
 -A intern -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 -A intern -p ospf -j ACCEPT
--A intern -i {{ intern }} -o {{ extern }} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j internTCPforward
--A intern -i {{ intern }} -o {{ extern }} -p udp -m conntrack --ctstate NEW -j internUDPforward
 -A intern -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j internTCP
--A internTCPforward -p tcp -m tcp --dport 80 -j ACCEPT
--A internTCPforward -p tcp -m tcp --dport 8080 -j ACCEPT
--A internTCPforward -p tcp -m tcp --dport 443 -j ACCEPT
--A internUDPforward -p udp -m udp --dport 53 -j ACCEPT
+-A intern -p udp -m conntrack --ctstate NEW -j internUDP
 -A internTCP -p tcp -m tcp --dport 22 -j ACCEPT
+-A internUDP -j REJECT
 -A extern -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 -A extern -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j externTCP
 -A extern -p udp -m conntrack --ctstate NEW -j externUDP
 -A externTCP -p tcp -m tcp --dport 22 -j ACCEPT
 -A externUDP -p udp -m udp --dport 1194 -j ACCEPT
+-A mgmt -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
+-A mgmt -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j mgmtTCP
+-A mgmt -p udp -m conntrack --ctstate NEW -j mgmtUDP
+-A mgmtTCP -p tcp -m tcp --dport 22 -j ACCEPT
+-A mgmtUDP -p udp -m udp --dport 68 -j ACCEPT
+-A internforward -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
+-A internforward -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j internTCPforward
+-A internforward -p udp -m conntrack --ctstate NEW -j internUDPforward
+-A internTCPforward -p tcp -m multiport --dports 80,21,22,8080,443 -j ACCEPT 
+-A internUDPforward -p udp --dport 53 -j ACCEPT
 COMMIT

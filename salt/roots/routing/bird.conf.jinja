@@ -1,6 +1,11 @@
+{% set hostname = grains['host'] -%}
 log syslog all;
- 
-router id {{ grains['ip4_interfaces']['enp0s9'][0] }};
+
+# All routers have a enp0s8 interface, so that's a good id
+# Default is the first interface, which is enp0s3,
+# and then explosions, because all the routers have the same IP
+# on interface enp0s3, because of (bloody) Virtualbox
+router id {{ grains['ip4_interfaces']['enp0s8'][0] }};
  
 protocol direct {
     import all;
@@ -17,16 +22,33 @@ protocol device {
     scan time 10; # Scan interfaces every 10 seconds
 }
  
-protocol ospf MyOSPF {
+# We use OSPF authentication as a perk
+# Rules are altered according to hostname
+
+# Darkrouter has a stub setting on its internal interface
+# on a different stub area
+# This is only for sending a default route to the webservers.
+
+protocol ospf HypnOSPF {
      rfc1583compat yes;
      tick 2;
      import all;
      export all;
      area 0.0.0.0 {
-{%- if 'edge' in grains['host'] %}
-       interface "enp0s9";
-{%- else %}
-       interface "enp0s8", "enp0s9";
+{%- if not 'edge' in grains['host'] %}
+       interface "enp0s8" {
+           authentication simple;
+           password "AllHailtotheHypnoToad";
+       };
 {%- endif %}
+  {%- if 'dark' in hostname %}
+    };
+     area 850 {
+       stub yes;
+  {%- endif %}
+       interface "enp0s9" {
+           authentication simple;
+           password "AllHailtotheHypnoToad";
+        };
     };
 }

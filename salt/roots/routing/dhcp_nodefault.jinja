@@ -1,0 +1,13 @@
+# We have a very basic dhclient config, which does everything as normal, 
+# except it doesn't listen to the "Router" argument, which is usually
+# the default gateway. It supersedes "routers" with /dev/null info...
+# Default gateway is injected via OSPF.
+
+option rfc3442-classless-static-routes code 121 = array of unsigned integer 8;
+
+send host-name = gethostname();
+request subnet-mask, broadcast-address, time-offset, 
+        domain-name, domain-name-servers, domain-search, host-name,
+        interface-mtu, ntp-servers;
+
+supersede routers;

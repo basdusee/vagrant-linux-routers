@@ -1,0 +1,39 @@
+log syslog all;
+
+# We just use the ip as ID
+router id {{ grains['ip4_interfaces']['enp0s8'][0] }};
+ 
+protocol direct {
+    import all;
+    interface "*"; # Restrict network interfaces it works with
+}
+
+# we do not propagate routes from this host
+# OSPF is for incoming routes only.
+ 
+protocol device {
+    scan time 10; # Scan interfaces every 10 seconds
+}
+
+# The "kernel" (aka normal routing table) should also be present
+# to push the default route to
+protocol kernel {
+    learn;
+    scan time 5;
+    export all; # Actually put BIRD routes into the Linux table
+}
+ 
+# Just a simple OSPF listener
+# It gets the default gateway from an ABR
+
+protocol ospf HypnOSPF {
+     rfc1583compat yes;
+     tick 2;
+     area 850 {
+       stub yes;
+       interface "enp0s8" {
+           authentication simple;
+           password "AllHailtotheHypnoToad";
+       };
+    };
+}
