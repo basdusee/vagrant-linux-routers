@@ -1,0 +1,20 @@
+[Unit]
+Description=Gunicorn application server running hypnotoad
+After = network.target
+
+[Service]
+PermissionsStartOnly = true
+PIDFile = /run/hypnotoad/hypnotoad.pid
+User = www-data
+Group = www-data
+WorkingDirectory = /srv/hypnotoad
+ExecStartPre = /bin/mkdir /run/hypnotoad
+ExecStartPre = /bin/chown -R www-data:www-data /run/hypnotoad
+ExecStart = /usr/bin/env gunicorn --workers 3 -b 127.0.0.1:8000 -m 007 --pid /run/hypnotoad/hypnotoad.pid wsgi
+ExecReload = /bin/kill -s HUP $MAINPID
+ExecStop = /bin/kill -s TERM $MAINPID
+ExecStopPost = /bin/rm -rf /run/hypnotoad
+PrivateTmp = true
+
+[Install]
+WantedBy = multi-user.target
