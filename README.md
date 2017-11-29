@@ -18,8 +18,8 @@ What do you need to go wild with this project?
 
 ## Network design of the Vagrant Linux router thingy
 For your amusement, a network diagram:
-![Networkdesign](./documentation/networkdrawing.png)
-Edge1 en Edge2 are two redundant Edge routers which are connected to the  Internet (The "Internet" in this case is a Host-Only network connected to the Virtualbox host). The general idea is to configure these routers Active/Passive or Active/Active. They should be able to replace each other when one of them fail.
+![Networkdesign](./documentation/networkdesign.png)
+Edge1 and Edge2 are two redundant Edge routers which are connected to the  Internet (The "Internet" in this case is a Host-Only network connected to the Virtualbox host). The general idea is to configure these routers Active/Passive or Active/Active. They should be able to replace each other when one of them fail.
 
 Right behind this router there's an "intern" subnet (call it some sort of DMZ, which is not the correct term) to which a single internal router is connected (the Introuter). This router discloses a much more internal subnet which should be anounced to the Edge routers via a routing protocol. There are two webservers connected to this internal subnet. That sounds like a job for a load balancer...
 
