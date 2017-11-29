@@ -1,6 +1,6 @@
 base:
   '*':
-    - basis
+    - basesetup
     - routing
   'edge*':
     - firewall.edge
