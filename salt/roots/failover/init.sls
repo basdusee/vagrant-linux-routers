@@ -4,7 +4,7 @@ net.ipv4.ip_nonlocal_bind:
   sysctl.present:
     - value: 1
 
-failover_pakketten:
+failover_packages:
   pkg.installed:
     - pkgs:
       - libipset3 # critical for keepalived, Y U no dependancy?!?

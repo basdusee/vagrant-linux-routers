@@ -4,7 +4,7 @@ def run():
     config = {}
 
     # Install packages, no magic here
-    config['firewallpakkettenlijst'] = {
+    config['firewallpackagelist'] = {
                 'pkg.installed': [
                     {'name': 'iptables-persistent'},
                 ],
@@ -17,11 +17,11 @@ def run():
     # get hostname for targeting firewall
     hostname = __grains__['host']
     if 'router' in hostname:
-        vuurmuur = __pillar__['router']['firewall']
+        fireports = __pillar__['router']['firewall']
     elif 'web' in hostname:
-        vuurmuur = __pillar__['webserver']['firewall']
+        fireports = __pillar__['webserver']['firewall']
     else:
-        vuurmuur = False
+        fireports = False
     
     # get all the interfaces and strip off lo
     int4 = __grains__['ip4_interfaces']
@@ -53,7 +53,7 @@ def run():
                     'mgmt': mgmt,
                     'intint': int4.keys(),
                     'appserver': appserver,
-                    'vuurmuur': vuurmuur
+                    'fireports': fireports
                     }
                 }
                 ]

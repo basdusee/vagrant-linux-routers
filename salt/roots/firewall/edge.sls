@@ -1,4 +1,4 @@
-firewallpakkettenlijst:
+firewallpackagelist:
   pkg.installed:
     - pkgs:
       - iptables-persistent

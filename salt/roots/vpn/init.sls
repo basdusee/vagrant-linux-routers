@@ -1,4 +1,4 @@
-vpnpakkettenlijst:
+vpnpackagelist:
   pkg.installed:
     - pkgs:
       - strongswan

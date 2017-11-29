@@ -2,3 +2,4 @@
 # Vagrant run stuff #
 #####################
 .vagrant
+.gitignore

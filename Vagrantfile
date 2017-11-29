@@ -44,6 +44,7 @@ Vagrant.configure("2") do |config|
 
     edge1.vm.network "private_network", ip: "192.168.23.5/24", nic_type: "virtio"
     edge1.vm.network "private_network", ip: "172.23.0.250/24", virtualbox__intnet: "internal-affairs", nic_type: "virtio"
+    edge1.vm.network "private_network", ip: "192.168.212.1/30", virtualbox__intnet: "conntrack", nic_type: "virtio"
     edge1.vm.provider "virtualbox" do |vb|
         vb.memory = "256"
         vb.name = "edge1"
@@ -57,6 +58,7 @@ Vagrant.configure("2") do |config|
 
     edge2.vm.network "private_network", ip: "192.168.23.6/24", nic_type: "virtio"
     edge2.vm.network "private_network", ip: "172.23.0.251/24", virtualbox__intnet: "internal-affairs", nic_type: "virtio"
+    edge2.vm.network "private_network", ip: "192.168.212.2/30", virtualbox__intnet: "conntrack", nic_type: "virtio"
     edge2.vm.provider "virtualbox" do |vb|
         vb.memory = "256"
         vb.name = "edge2"

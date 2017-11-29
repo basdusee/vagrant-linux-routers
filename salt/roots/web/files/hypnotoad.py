@@ -1,9 +1,21 @@
 from flask import Flask
+import socket
+import fcntl
+import struct
+
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
+
 application = Flask(__name__)
 
 @application.route("/")
 def hello():
-    return "<h1 style='color:blue'>Hello There!</h1>"
+    return "<center><h1>Hey!, This is " + socket.gethostname() + " listening on IP" + get_ip_address('eth0s8') + "</h1></center>"
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0')

@@ -29,10 +29,10 @@ COMMIT
 -A intern -p ospf -j ACCEPT
 -A intern -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j internTCP
 -A intern -p udp -m conntrack --ctstate NEW -j internUDP
-{%- for port in vuurmuur['tcp'] %}
+{%- for port in fireports['tcp'] %}
 -A internTCP -p tcp -m tcp --dport {{ port }} -j ACCEPT
 {%- endfor -%}
-{%- for port in vuurmuur['udp'] %}
+{%- for port in fireports['udp'] %}
 -A internUDP -p udp -m udp --dport {{ port }} -j ACCEPT
 {% endfor -%}
 -A mgmt -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT

@@ -1,4 +1,4 @@
-pakkettenlijst:
+packagelist:
   pkg.installed:
     - pkgs:
       - tmux
@@ -20,8 +20,10 @@ pakkettenlijst:
       - dc
       - dnstracer
       - iptraf
+      - elinks
+      - iptstate
 
-geen_rpc_meuk:
+no_rpc_bs:
   service.dead:
     - name: rpcbind
     - enable: False
