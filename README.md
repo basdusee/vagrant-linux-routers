@@ -11,7 +11,7 @@ The downside is the complete lack of (commercial) support and the complete respo
 What do you need to go wild with this project?
 * Install Vagrant
 * Install Virtualbox
-* git clone https://code.ogdsoftware.nl/bas.dusee/vagrang-Linux-routers.git
+* git clone https://github.com/basdusee/vagrant-linux-routers.git
 * cd *vagrant-Linux-routers-repo-dir*
 * Vagrant up
 * Vagrant ssh Edge1 (or Edge2 or Introuter, or Darkrouter, or Darkweb01/02)

@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="netwerktekening.svg"
+   sodipodi:docname="networkdesign.svg"
    inkscape:export-filename="C:\Users\bas.dusee\Vagrant\routers\documentatie\netwerktekening.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -127,9 +127,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="971.82696"
-     inkscape:cy="647.32232"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="790.24742"
+     inkscape:cy="469.47975"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -591,17 +591,17 @@
          x="132.44276"
          y="147.66168"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777767px;line-height:5.20347214px;font-family:'Palatino Linotype';-inkscape-font-specification:'Palatino Linotype';writing-mode:lr-tb;stroke-width:0.26458332"
-         id="tspan5669">enp0s3 is voor alle routers 10.0.2.15/24</tspan><tspan
+         id="tspan5669">enp0s3 has the same IP 10.0.2.15/24 for all </tspan><tspan
          sodipodi:role="line"
          x="132.44276"
          y="154.27626"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777767px;line-height:5.20347214px;font-family:'Palatino Linotype';-inkscape-font-specification:'Palatino Linotype';writing-mode:lr-tb;stroke-width:0.26458332"
-         id="tspan5675">en management VLAN met gateway 10.0.2.2</tspan><tspan
+         id="tspan5675">routers. The default route is 10.0.2.2 via enp0s3</tspan><tspan
          sodipodi:role="line"
          x="132.44276"
          y="160.89085"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.52777767px;line-height:5.20347214px;font-family:'Palatino Linotype';-inkscape-font-specification:'Palatino Linotype';writing-mode:lr-tb;stroke-width:0.26458332"
-         id="tspan5671">Dit is Virtualbox en hier is niets aan te doen.</tspan></text>
+         id="tspan5671">This is Virtualbox magic, just accept it.</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:4.23333311px;line-height:2.82222223px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
