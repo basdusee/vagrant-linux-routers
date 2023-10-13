@@ -1,5 +1,5 @@
-# Essential! services on virtual ip's will not start or work
-# if this sysctl value is 0
+# Essential sysctl value for virtual IPs! 
+# services not start or work if this sysctl value is 0
 net.ipv4.ip_nonlocal_bind:
   sysctl.present:
     - value: 1
@@ -7,7 +7,6 @@ net.ipv4.ip_nonlocal_bind:
 failover_packages:
   pkg.installed:
     - pkgs:
-      - libipset3 # critical for keepalived, Y U no dependancy?!?
       - keepalived
       - haproxy
       - hatop
@@ -45,4 +44,3 @@ haproxy_service:
       - file: /etc/haproxy/haproxy.cfg
     - require:
       - service: keepalived_service
-

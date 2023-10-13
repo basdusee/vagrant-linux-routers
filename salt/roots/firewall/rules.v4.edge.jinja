@@ -1,7 +1,7 @@
 {%- set mgmt = "enp0s3" -%}
-{%- set intern = "enp0s9" %}
-{%- set extern = "enp0s8" -%}
-{%- set conntrack = "enp0s10" -%}
+{%- set extern = pillar['interfaces']['external'] -%}
+{%- set intern = pillar['interfaces']['internal'] -%}
+{%- set conntrack = pillar['interfaces']['conntrack'] -%}
 *nat
 :PREROUTING ACCEPT [0:0]
 :INPUT ACCEPT [0:0]

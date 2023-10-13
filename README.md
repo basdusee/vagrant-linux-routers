@@ -1,6 +1,6 @@
 # Virtual DIY Linux routers!
 This is a small excercise to configure Linux servers as (internet facing) routers.
-It's ment as a virtual solution and as a comparison to the functionality to solutions as Vyatta and NSX Edge routers.
+It's meant as a virtual solution and as a comparison to the functionality to solutions as Vyatta and NSX Edge routers.
 The whole thing is created in Vagrant, with SaltStack as provisioning language. It uses Virtualbox as a virtual platform.
 Testing is only done on a Windows machine due to lack of other equipment. YMMV on other platforms, although it shouldn't be hard to get this running under Linux or some form of BSD.
 

@@ -29,7 +29,7 @@ def run():
 
     mgmt = ''
     appserver = False
-    for intname, ip in int4.iteritems():
+    for intname, ip in int4.items():
         if ip == ['10.0.2.15',]:
             mgmt = intname
 

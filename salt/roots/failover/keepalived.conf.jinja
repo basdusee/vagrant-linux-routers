@@ -1,6 +1,6 @@
 {%- set floatip = pillar['keepaliveip']['www'] -%}
-{%- set extint = "enp0s8" -%}
-{%- set intint = "enp0s9" -%}
+{%- set extint = pillar['interfaces']['external'] -%}
+{%- set intint = pillar['interfaces']['internal'] -%}
 
 vrrp_script chk_haproxy {
     script "killall -0  haproxy"

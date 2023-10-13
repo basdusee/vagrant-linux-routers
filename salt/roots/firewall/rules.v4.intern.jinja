@@ -1,3 +1,5 @@
+{%- set mgmt = "enp0s3" -%}
+{%- set int = pillar['interfaces']['internal'] -%}
 *nat
 :PREROUTING ACCEPT [0:0]
 :INPUT ACCEPT [0:0]

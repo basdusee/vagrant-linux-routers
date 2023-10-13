@@ -6,24 +6,21 @@ packagelist:
       - dstat
       - curl
       - mc
-      - rsync
       - nmap
-      - file
       - time
       - sl
       - apg
       - jq
       - virt-what
-      - python-pip
+      - python3-pip
       - mtr-tiny
       - netcat
       - dc
       - dnstracer
-      - iptraf
       - elinks
       - iptstate
 
-no_rpc_bs:
-  service.dead:
-    - name: rpcbind
-    - enable: False
+#no_rpc_bs:
+#  service.dead:
+#    - name: rpcbind
+#    - enable: False
